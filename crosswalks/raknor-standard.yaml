@@ -1,0 +1,426 @@
+# Raknor Agent Governance Standard v1.0 → Agent Baseline v1.0-draft
+#
+# Filed by Equilateral AI (JamesFordAI). One mapping row per Raknor control
+# or mandatory failure condition, citing bare baseline identifiers.
+# Partial and contested mappings are flagged — gaps are findings.
+
+framework: "Raknor Agent Governance Standard"
+version: "1.0"
+source_url: "https://github.com/raknor-ai/agent-governance-standard"
+filed_by: "JamesFordAI (Equilateral AI)"
+filed_date: "2026-10-18"
+
+# ─── Domain 1 — Authority Governance (AG) ───
+
+mappings:
+
+  - control: SC-AG-01
+    title: "Consequence Tier Classification"
+    type: Mandatory
+    entries: [AUT-02, AUT-05]
+    note: >-
+      Partial — Raknor requires pre-execution consequence tier classification
+      (reversibility, blast radius, impact). Baseline AUT-02 determines
+      authority by purpose, task, target, action, time but does not prescribe
+      tier classification as a distinct step. AUT-05 routes above-threshold
+      actions to independent approval, which presupposes a threshold but not
+      a tier taxonomy.
+
+  - control: SC-AG-02
+    title: "Consequence Tier Enforcement"
+    type: Mandatory
+    entries: [AUT-06, CON-01]
+    note: >-
+      Partial — Raknor explicitly requires enforcement at the execution layer,
+      not prompt-level. Baseline CON-01 blocks unapproved deployments and
+      AUT-06 fails closed on missing evidence. Neither explicitly prohibits
+      prompt-only enforcement, but the structural intent aligns.
+
+  - control: SC-AG-03
+    title: "Earned Authority Lifecycle"
+    type: Mandatory
+    entries: [AUT-02, AUT-08]
+    note: >-
+      Weak — Raknor requires progressive authority advancement, competence-based
+      promotion, revocation, and authority decay. Baseline AUT-02 is static
+      authority determination; AUT-08 provides temporary elevation but not
+      progressive earned authority. Gap: baseline has no equivalent of
+      authority decay or competence-based advancement.
+
+  - control: SC-AG-04
+    title: "Cryptographic Mandate Integrity"
+    type: Mandatory
+    entries: [OBS-06, AUT-09]
+    note: >-
+      Partial — Raknor requires cryptographic signing of governance mandates
+      (authority grants, policy configs, overrides). Baseline OBS-06 covers
+      integrity protection of evidence but not governance mandates specifically.
+      AUT-09 binds credentials to holders but does not address mandate signing.
+      Gap: baseline does not require governance configuration itself to be
+      cryptographically verifiable.
+
+  - control: SC-AG-05
+    title: "Resource Governance"
+    type: Conditional
+    entries: [CON-03, CON-04]
+    note: >-
+      Partial — Raknor ties resource limits to consequence tiers. Baseline
+      CON-03 scopes compute/duration/process to least privilege and CON-04
+      governs capability profiles, but neither ties resource budgets to
+      consequence classification.
+
+  - control: SC-AG-06
+    title: "Structural Constraint Enforcement"
+    type: Conditional
+    entries: [CON-01, CON-03, CON-04]
+    note: >-
+      Strong — Raknor requires architectural enforcement (tool registries,
+      sandboxes, capability-based access) over instruction-following. Baseline
+      CON-01 (admission), CON-03 (isolation), and CON-04 (capability profiles)
+      collectively require structural enforcement. Alignment is substantive.
+
+# ─── Domain 2 — Observability (OB) ───
+
+  - control: SC-OB-01
+    title: "Decision Record Completeness"
+    type: Mandatory
+    entries: [OBS-01, OBS-05, OBS-06]
+    note: >-
+      Strong — Raknor requires a decision record per consequential action
+      (action, inputs, tier, authority, timestamp) that is immutable after
+      creation. Baseline OBS-01 records comparable fields; OBS-05 links
+      outcomes to intent/identity/policy; OBS-06 provides integrity protection
+      including immutability. Raknor's per-action granularity and explicit
+      immutability requirement are well covered.
+
+  - control: SC-OB-02
+    title: "Provenance Chain"
+    type: Mandatory
+    entries: [OBS-02, OBS-05]
+    note: >-
+      Strong — Raknor requires a verifiable chain linking decisions to causal
+      inputs and active governance constraints. Baseline OBS-02 correlates
+      events across agents/tools/policy; OBS-05 links outcomes to full
+      decision context. The "active governance constraints at time of
+      execution" requirement in Raknor is more explicit than baseline's
+      framing.
+
+  - control: SC-OB-03
+    title: "Event-Driven Communication"
+    type: Mandatory
+    entries: [OBS-03]
+    note: >-
+      Partial — Raknor requires real-time event emission to external monitoring
+      (authority changes, violations, overrides, failures). Baseline OBS-03
+      detects drift and unexpected behavior but frames this as monitoring
+      rather than event emission. Gap: baseline does not prescribe a real-time
+      event bus for governance state changes.
+
+  - control: SC-OB-04
+    title: "Calibration Monitoring"
+    type: Conditional
+    entries: [OBS-03, VAL-04]
+    note: >-
+      Weak — Raknor requires self-calibration tracking and quality degradation
+      alerting. Baseline OBS-03 monitors drift and VAL-04 validates outcomes,
+      but neither addresses the agent's own confidence calibration as a
+      monitored signal. Gap: no baseline equivalent of confidence-calibration
+      tracking.
+
+  - control: SC-OB-05
+    title: "Portfolio Health"
+    type: Conditional
+    entries: [DIS-07]
+    note: >-
+      Weak — Raknor requires aggregate visibility into all active tasks
+      (failure rates, escalation frequency, resource utilization). Baseline
+      DIS-07 reconciles registries with runtime evidence but focuses on
+      discovery discrepancies, not portfolio-level operational health.
+      Gap: baseline does not address fleet-wide health dashboarding.
+
+# ─── Domain 3 — Interoperability (IO) ───
+
+  - control: SC-IO-01
+    title: "Standard Agent Interface"
+    type: Mandatory
+    entries: [DIS-04, DIS-05]
+    note: >-
+      Weak — Raknor requires a well-defined, documented, versioned interface
+      for task submission and result retrieval. Baseline DIS-04 inventories
+      components and DIS-05 maps composition, but neither prescribes an agent
+      communication interface contract. Gap: baseline does not address agent
+      API surface standardization.
+
+  - control: SC-IO-02
+    title: "Multi-Agent Coordination"
+    type: Mandatory
+    entries: [AUT-03, CON-02]
+    note: >-
+      Partial — Raknor requires agents to maintain governance under peer
+      instructions and prohibits peer-driven authority elevation. Baseline
+      AUT-03 prevents delegation attenuation and CON-02 detects toxic
+      capability combinations, but neither explicitly addresses maintaining
+      governance independence from peer agent instructions.
+
+  - control: SC-IO-03
+    title: "Governance Injection"
+    type: Conditional
+    entries: [CON-04]
+    note: >-
+      Partial — Raknor envisions accepting constraints from external
+      governance systems (compliance engines, policy servers). Baseline CON-04
+      governs through centrally managed capability profiles but does not
+      address runtime injection of external governance constraints.
+
+  - control: SC-IO-04
+    title: "Context Transfer"
+    type: Conditional
+    entries: [AUT-03, OBS-02]
+    note: >-
+      Partial — Raknor requires preserving the full provenance chain and
+      governance state on agent-to-agent handoffs. Baseline AUT-03 preserves
+      originating context across delegation hops and OBS-02 correlates events
+      across agents, but auditable context transfer as a specific handoff
+      protocol is not prescribed.
+
+# ─── Domain 4 — Safety & Reliability (SR) ───
+
+  - control: SC-SR-01
+    title: "Failure Recovery"
+    type: Mandatory
+    entries: [RES-04, AUT-06]
+    note: >-
+      Partial — Raknor requires failure detection and recovery procedures
+      proportional to consequence tier. Baseline RES-04 provides safe failure
+      and non-agent fallback; AUT-06 halts on missing verification. Neither
+      prescribes consequence-tier-proportional recovery procedures.
+
+  - control: SC-SR-02
+    title: "Timeout Enforcement"
+    type: Mandatory
+    entries: [CON-03, RES-01]
+    note: >-
+      Partial — Raknor requires configurable per-tier execution timeouts that
+      trigger recovery on expiry. Baseline CON-03 scopes duration as a
+      confinement dimension and RES-01 requires stop within an appropriate
+      response period, but neither specifies per-tier timeout configuration
+      or timeout-triggered recovery.
+
+  - control: SC-SR-03
+    title: "Human-in-the-Loop"
+    type: Mandatory
+    entries: [AUT-05, AUT-07]
+    note: >-
+      Strong — Raknor requires human approval for high-consequence actions,
+      with denial or timeout blocking execution. Baseline AUT-05 routes
+      above-threshold actions to independent approval and AUT-07 requires
+      re-verification when risk exceeds session assurance. Close alignment.
+
+  - control: SC-SR-04
+    title: "Conflicting Information"
+    type: Conditional
+    entries: []
+    note: >-
+      No mapping — Raknor requires surfacing contradictory inputs rather than
+      silently choosing. Baseline has no equivalent control. Gap: baseline
+      does not address conflicting-input handling behavior.
+
+  - control: SC-SR-05
+    title: "Graceful Degradation"
+    type: Conditional
+    entries: [RES-04]
+    note: >-
+      Partial — Raknor requires scope reduction under resource constraints
+      or partial failure. Baseline RES-04 provides safe failure and non-agent
+      fallback but frames this as a binary (fail or fall back), not as
+      progressive scope reduction.
+
+  - control: SC-SR-06
+    title: "External Backpressure Response"
+    type: Conditional
+    entries: []
+    note: >-
+      No mapping — Raknor requires respecting external rate limits and circuit
+      breakers. Baseline does not address external backpressure handling.
+      Gap: operational resilience to upstream rate limiting is out of
+      baseline scope.
+
+# ─── Domain 5 — Adversarial Resilience (AD) ───
+
+  - control: SC-AD-01
+    title: "Prompt Injection Resistance"
+    type: Mandatory
+    entries: [VAL-01, CON-02]
+    note: >-
+      Partial — Raknor requires demonstrated resistance to multi-turn,
+      encoded, and indirect prompt injection. Baseline VAL-01 tests against
+      adversarial scenarios derived from tools/data/actions, and CON-02
+      detects dangerous capability combinations, but neither names prompt
+      injection as a specific threat class. The baseline's adversarial
+      testing is broader but less prescriptive.
+
+  - control: SC-AD-02
+    title: "Authority Spoofing Detection"
+    type: Mandatory
+    entries: [AUT-01, AUT-09]
+    note: >-
+      Partial — Raknor requires identity and authority verification for
+      instruction issuers. Baseline AUT-01 attributes actions to identities
+      and AUT-09 binds credentials via proof-of-possession. Neither explicitly
+      addresses the adversarial scenario of spoofed authority claims from
+      untrusted instruction sources.
+
+  - control: SC-AD-03
+    title: "Data Poisoning Resilience"
+    type: Mandatory
+    entries: [VAL-01, VAL-03]
+    note: >-
+      Partial — Raknor requires governance to hold under corrupted or
+      adversarially modified input data. Baseline VAL-01 tests agents in
+      adversarial scenarios and VAL-03 tests agent-generated artifacts, but
+      neither specifically addresses maintaining governance invariants under
+      data poisoning.
+
+  - control: SC-AD-04
+    title: "Social Engineering Resistance"
+    type: Mandatory
+    entries: [VAL-01]
+    note: >-
+      Weak — Raknor requires resistance to urgency manipulation, emotional
+      appeals, authority impersonation, and incremental boundary testing.
+      Baseline VAL-01 covers adversarial testing broadly but does not name
+      social engineering as a threat class. Gap: baseline does not prescribe
+      social-engineering-specific testing scenarios.
+
+  - control: SC-AD-05
+    title: "Timing Attack Resistance"
+    type: Conditional
+    entries: [AUT-06]
+    note: >-
+      Weak — Raknor addresses race conditions, session boundaries, and
+      enforcement gaps during state transitions. Baseline AUT-06 fails closed
+      on missing verification, which partially mitigates timing gaps, but
+      does not address timing attacks as a specific threat class.
+
+# ─── Mandatory Failure Conditions (MFCs) ───
+
+  - control: MFC-01
+    title: "Below Minimum Certification Threshold"
+    entries: []
+    note: >-
+      No mapping — scoring and certification thresholds are a Raknor
+      assessment model concept. Baseline does not have a pass/fail
+      certification model.
+
+  - control: MFC-02
+    title: "Authority Boundary Violation"
+    entries: [AUT-02, AUT-06, CON-01]
+    note: >-
+      Strong — executing above authorized tier maps to baseline AUT-02
+      (authority determination), AUT-06 (fail-closed enforcement), and
+      CON-01 (admission enforcement). The prohibition is well covered
+      across these controls.
+
+  - control: MFC-03
+    title: "Adversarial Compromise"
+    entries: [VAL-01]
+    note: >-
+      Partial — governance defeated by standard adversarial scenario maps
+      to baseline VAL-01 (agent-specific security testing). Baseline treats
+      this as a testing requirement; Raknor treats it as an immediate
+      certification disqualifier.
+
+  - control: MFC-04
+    title: "Safety-Critical Failure"
+    entries: [RES-04, OBS-01]
+    note: >-
+      Strong — silent failure without reporting maps to baseline RES-04
+      (safe failure) and OBS-01 (telemetry recording). Both frameworks
+      treat silent degradation as a serious deficiency.
+
+  - control: MFC-05
+    title: "Audit Trail Integrity Failure"
+    entries: [OBS-06, OBS-01]
+    note: >-
+      Strong — modifying, deleting, or failing to generate decision records
+      maps directly to baseline OBS-06 (evidence integrity and protection)
+      and OBS-01 (telemetry completeness). Close alignment.
+
+  - control: MFC-06
+    title: "Critical Unpatched Vulnerability"
+    entries: []
+    note: >-
+      No mapping — CVSS 9.0+ vulnerability with exploitation path is a
+      Raknor Lane 2 (cybersecurity posture) concept. Baseline is
+      governance-focused and does not address vulnerability management.
+
+  - control: MFC-07
+    title: "Evidence Integrity Failure"
+    entries: []
+    note: >-
+      No mapping — SBOM/VEX/OSCAL evidence package validation is a Raknor
+      Lane 2 (cybersecurity posture) concept. Baseline does not prescribe
+      evidence package formats or schema validation.
+
+# ─── Reverse gaps: baseline controls with no Raknor equivalent ───
+
+reverse_gaps:
+  - control: DIS-01
+    title: "Authoritative agent registry"
+    note: "Raknor does not have a Discover domain. Agent registration is implicit but not a standalone control."
+
+  - control: DIS-02
+    title: "Ownership and risk context"
+    note: "No Raknor equivalent. Consequence tiers (SC-AG-01) classify actions, not agents."
+
+  - control: DIS-03
+    title: "Status and decision history"
+    note: "No Raknor equivalent for agent lifecycle status and version history."
+
+  - control: DIS-04
+    title: "Authoritative component registry"
+    note: "No Raknor equivalent. Component inventory is outside Raknor's scope."
+
+  - control: DIS-05
+    title: "Agent composition mapping"
+    note: "No Raknor equivalent. Runtime composition tracking is not addressed."
+
+  - control: DIS-06
+    title: "Effective-access mapping"
+    note: "No Raknor equivalent. Credential and access inventory is not addressed."
+
+  - control: DIS-07
+    title: "Automated discovery and reconciliation"
+    note: "No Raknor equivalent. Automated drift detection between registries and runtime is not addressed."
+
+  - control: AUT-04
+    title: "Just-in-time credentialing"
+    note: "No Raknor equivalent for short-lived, resource-scoped credential issuance kept outside model context."
+
+  - control: OBS-04
+    title: "Unintended action detection"
+    note: "No Raknor equivalent. Detection of technically-permitted-but-unintended actions (e.g., committing credentials) is not addressed as a separate control."
+
+  - control: VAL-02
+    title: "First-party agentic components testing"
+    note: "No Raknor equivalent. Component-level security testing is not addressed; Raknor tests the deployed system as a whole."
+
+  - control: VAL-03
+    title: "Agent-generated artifact testing"
+    note: "Partial — Raknor's adversarial testing may cover agent outputs, but it lacks a dedicated control for testing agent-produced code/config artifacts."
+
+  - control: VAL-04
+    title: "Agent outcome validation"
+    note: "No Raknor equivalent. Post-completion outcome validation (business outcomes, pre-finalization review for high-impact actions) is not addressed."
+
+  - control: RES-02
+    title: "Version and component quarantine"
+    note: "No Raknor equivalent. Component-level quarantine is outside Raknor's scope (Raknor certifies systems, not components)."
+
+  - control: RES-03
+    title: "Impact scoping and evidence preservation"
+    note: "No Raknor equivalent. Post-incident impact scoping and evidence preservation is not a standalone control."
+
+  - control: RES-05
+    title: "Agentic component rug-pull protection"
+    note: "No Raknor equivalent. Protection against unapproved changes to component code/instructions/permissions is not addressed."

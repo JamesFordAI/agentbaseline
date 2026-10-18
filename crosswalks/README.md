@@ -10,6 +10,8 @@ contribution we need most.
 
 | Framework | Status | File |
 |---|---|---|
+| Equilateral Agent Governance Scorecard | filed | `equilateral-scorecard.yaml` |
+| Raknor Agent Governance Standard | filed | `raknor-standard.yaml` |
 | NIST AI RMF | wanted | `nist-ai-rmf.yaml` |
 | ISO/IEC 42001 | wanted | `iso-42001.yaml` |
 | OWASP | wanted | `owasp.yaml` |
