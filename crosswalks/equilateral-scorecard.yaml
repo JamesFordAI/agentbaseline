@@ -1,0 +1,353 @@
+# Crosswalk: Equilateral Agent Governance Scorecard → Agent Baseline
+#
+# The Scorecard evaluates whether a platform architecturally supports
+# governance; the Baseline specifies which controls must be present.
+# The Scorecard is structural ("can the platform do this?"); the Baseline
+# is prescriptive ("this must be true"). Partial mappings are common
+# because the two documents ask the question at different levels.
+#
+# Scorecard criteria not mapped to any control are listed at the end —
+# they represent properties the Scorecard evaluates that the Baseline
+# does not yet address.
+#
+# License: Scorecard content is CC BY 4.0, Equilateral AI.
+# Reference: J. Ford, "Toward a Theory of Governance Fidelity in
+#   Foundation Model Agentic Systems," working paper, Equilateral AI, 2026.
+---
+framework: "Equilateral Agent Governance Scorecard"
+version: "1.1-draft"
+source: "https://github.com/Equilateral-AI/agent-governance-scorecard"
+license: "CC BY 4.0"
+
+mappings:
+  # ── DIS: Discover ─────────────────────────────────────────────────
+
+  - control: DIS-01
+    entries: [SC-1.2]
+    note: >-
+      Direct match — both require an authoritative agent registry with
+      responsible-party tracking. Baseline adds a stable-identifier
+      requirement the scorecard does not specify.
+
+  - control: DIS-02
+    entries: [SC-1.2]
+    note: >-
+      Partial — scorecard requires agents be "trackable to responsible
+      parties"; baseline decomposes this into business purpose, accountable
+      owners, and risk classification. Scorecard criterion is broader but
+      shallower.
+
+  - control: DIS-03
+    entries: [SC-1.2]
+    note: >-
+      Partial — scorecard's registry criterion implies status tracking;
+      baseline makes decision history and exception management explicit.
+
+  - control: DIS-04
+    entries: [SC-1.2]
+    note: >-
+      Partial — scorecard registers agents; baseline separately registers
+      components (models, MCP servers, skills, plugins, tools). Scorecard
+      does not distinguish agent-level from component-level inventory.
+
+  - control: DIS-05
+    entries: [SC-1.3]
+    note: >-
+      Direct match — both require understanding of agent interdependencies
+      and composition. Baseline adds runtime-resolved versions and
+      vulnerability-impact tracing.
+
+  - control: DIS-06
+    entries: [SC-1.2, SC-4.4]
+    note: >-
+      Partial — scorecard's SC-1.2 covers identity tracking; SC-4.4
+      (authority bounded per task) implies access mapping. Baseline makes
+      effective-access mapping a separate, explicit requirement including
+      credential-to-permission chains.
+
+  - control: DIS-07
+    entries: [SC-1.3]
+    note: >-
+      Partial — scorecard requires dependency-aware execution and cascading
+      effect management; baseline requires automated reconciliation between
+      registries and observed evidence from multiple sources. Baseline is
+      more specific about the detection mechanism.
+
+  # ── CON: Constrain ────────────────────────────────────────────────
+
+  - control: CON-01
+    entries: [SC-4.1, SC-4.3]
+    note: >-
+      Direct match — both require pre-execution blocking of unapproved
+      agents. Baseline adds validation-evidence and configuration-boundary
+      preconditions to the admission gate.
+
+  - control: CON-02
+    entries: [SC-4.2]
+    note: >-
+      Partial — scorecard requires non-bypassable controls; baseline
+      identifies a specific class of what to block (toxic capability
+      combinations, including emergent ones). Scorecard is broader;
+      baseline is more specific about the threat shape.
+
+  - control: CON-03
+    entries: [SC-4.2]
+    note: >-
+      Partial — both require that agents cannot circumvent governance.
+      Baseline decomposes this into specific isolation boundaries
+      (filesystem, network, credentials, compute, persistence). Scorecard
+      states the property; baseline specifies the mechanism.
+
+  - control: CON-04
+    entries: [SC-4.4]
+    note: >-
+      Direct match — both require per-task/use-case scoping of agent
+      capabilities. Baseline specifies centrally governed profiles;
+      scorecard requires authority bounded per task.
+
+  # ── AUT: Authorize ────────────────────────────────────────────────
+
+  - control: AUT-01
+    entries: [SC-3.1, SC-3.2]
+    note: >-
+      Partial — scorecard's SC-3.1 (complete action coverage) and SC-3.2
+      (unified audit trail) together require action attribution. Baseline
+      makes identity, principal, purpose, deployment, run, task, target
+      and time explicit per action. Scorecard evaluates the platform
+      capability; baseline specifies the required fields.
+
+  - control: AUT-02
+    entries: [SC-4.4]
+    note: >-
+      Direct match — both require authority to be determined per action
+      according to purpose, task, and scope. Baseline adds jurisdiction
+      and validity period. Neither addresses cumulative authority across
+      a sequence of actions (see baseline issue #44).
+
+  - control: AUT-03
+    entries: [SC-4.5]
+    note: >-
+      Direct match — both require that delegated authority cannot exceed
+      the caller's authority and that delegation hops are recorded.
+
+  - control: AUT-04
+    entries: [SC-4.4]
+    note: >-
+      Partial — scorecard requires authority bounded per task; baseline
+      specifies the credential mechanism (short-lived, resource-scoped,
+      outside model context). Scorecard evaluates the property; baseline
+      specifies how to achieve it.
+
+  - control: AUT-05
+    entries: [SC-5.3]
+    note: >-
+      Direct match — both require human approval for actions above a
+      threshold, with the decision point independent of the requesting
+      agent. Baseline issue #41 extends this to require the information
+      presented to the approver to also be independent of the requester.
+
+  - control: AUT-06
+    entries: [SC-4.1, SC-4.3]
+    note: >-
+      Direct match — both require fail-closed behavior: unauthorized
+      actions denied before execution, not logged after the fact.
+
+  - control: AUT-07
+    entries: [SC-5.1, SC-5.3]
+    note: >-
+      Partial — scorecard's SC-5.1 (confidence-based escalation) and
+      SC-5.3 (blocking approval) together cover the step-up pattern.
+      Baseline is more specific: re-verification or stronger factor when
+      action risk exceeds session assurance level.
+
+  - control: AUT-08
+    entries: [SC-5.3]
+    note: >-
+      Partial — scorecard requires blocking approval for critical actions;
+      baseline adds a governed elevation path with automatic expiry and
+      recorded justification. Scorecard evaluates the gate; baseline
+      specifies the elevation workflow.
+
+  - control: AUT-09
+    entries: []
+    note: >-
+      No scorecard equivalent. Proof-of-possession credential binding
+      (sender-constrained mechanisms preventing exfiltrated credential
+      reuse) is a cryptographic control below the scorecard's evaluation
+      level. Gap: scorecard does not address credential-binding strength.
+
+  # ── OBS: Observe ──────────────────────────────────────────────────
+
+  - control: OBS-01
+    entries: [SC-3.1]
+    note: >-
+      Direct match — both require every agent action to be logged.
+      Baseline specifies the required field set (principal, agent, run,
+      composition, task, model, tool, target, policy, action, result,
+      outcome); scorecard requires "complete action coverage" without
+      enumerating fields.
+
+  - control: OBS-02
+    entries: [SC-3.2]
+    note: >-
+      Direct match — both require correlated evidence across agents and
+      systems. Baseline specifies stable trace identifiers; scorecard
+      requires a unified audit system for human and AI actions.
+
+  - control: OBS-03
+    entries: [SC-1.4, SC-6.4]
+    note: >-
+      Direct match — SC-1.4 (real-time oversight with intervention
+      ability) and SC-6.4 (drift detection) together map to OBS-03's
+      behaviour and drift monitoring against an established baseline.
+
+  - control: OBS-04
+    entries: [SC-4.2]
+    note: >-
+      Partial — scorecard requires non-bypassable controls; baseline
+      adds detection of actions that are technically permitted but
+      inconsistent with intent (e.g. committing credentials alongside
+      code). Scorecard addresses prevention; baseline addresses detection
+      of what prevention missed.
+
+  - control: OBS-05
+    entries: [SC-2.1, SC-2.2]
+    note: >-
+      Direct match — both require linking outcomes to intent with
+      preserved reasoning. Baseline's "intent-to-outcome evidence" maps
+      to SC-2.1 (decision reasoning preserved at decision time) and
+      SC-2.2 (reasoning survives handoffs). Baseline issue #37 cites the
+      scorecard's Decision Integrity dimension as prior art.
+
+  - control: OBS-06
+    entries: [SC-3.3]
+    note: >-
+      Partial — scorecard requires tamper-evident records; baseline adds
+      consistent timestamps, completeness checks, access control,
+      redaction, encryption, retention, deletion and legal-hold handling.
+      Baseline issue #26 argues that OBS-06 is records management and
+      does not ensure evidence is checkable by someone who does not trust
+      the operator — a gap in both documents.
+
+  # ── VAL: Validate ─────────────────────────────────────────────────
+
+  - control: VAL-01
+    entries: []
+    note: >-
+      No scorecard equivalent. Agent-specific adversarial security testing
+      is an assurance activity the scorecard does not evaluate. Gap:
+      scorecard covers runtime governance properties but not pre-deployment
+      or periodic security testing.
+
+  - control: VAL-02
+    entries: []
+    note: >-
+      No scorecard equivalent. First-party component testing is an
+      assurance activity outside the scorecard's evaluation scope.
+
+  - control: VAL-03
+    entries: []
+    note: >-
+      No scorecard equivalent. Agent-generated artifact testing is an
+      assurance activity outside the scorecard's evaluation scope.
+
+  - control: VAL-04
+    entries: []
+    note: >-
+      No scorecard equivalent. Agent outcome validation (post-completion
+      checks) is partially addressed by the scorecard's observability
+      dimension but not as a distinct assurance requirement.
+
+  # ── RES: Respond ──────────────────────────────────────────────────
+
+  - control: RES-01
+    entries: [SC-1.1, SC-5.2]
+    note: >-
+      Direct match — SC-1.1 (central authority with power to halt) and
+      SC-5.2 (pre-harm intervention) together require the ability to stop
+      agents and revoke authority. Baseline adds a response-period
+      requirement tied to potential impact.
+
+  - control: RES-02
+    entries: [SC-1.1]
+    note: >-
+      Partial — scorecard's central orchestration authority implies the
+      ability to quarantine components; baseline makes version and
+      component quarantine a separate, explicit requirement.
+
+  - control: RES-03
+    entries: [SC-3.1, SC-3.3]
+    note: >-
+      Partial — scorecard's observability criteria (complete coverage,
+      tamper evidence) support impact scoping and evidence preservation,
+      but the scorecard does not address incident-response evidence
+      preservation as a distinct requirement.
+
+  - control: RES-04
+    entries: [SC-5.2]
+    note: >-
+      Partial — scorecard requires pre-harm intervention; baseline adds
+      safe failure modes and non-agent fallback for essential workflows.
+      Scorecard evaluates the intervention capability; baseline specifies
+      continuity requirements.
+
+  - control: RES-05
+    entries: [SC-6.1]
+    note: >-
+      Partial — scorecard's SC-6.1 (scoped learning boundaries) prevents
+      unbounded self-modification; baseline's rug-pull protection blocks
+      unapproved external changes to components. Both address unauthorized
+      change, but from different directions: scorecard addresses internal
+      drift, baseline addresses external supply-chain mutation.
+
+# ── Scorecard criteria with no baseline control ─────────────────────
+#
+# These scorecard criteria evaluate properties the baseline does not
+# currently specify as controls:
+
+unmapped_scorecard_criteria:
+  - entry: SC-1.5
+    title: "External backpressure response"
+    note: >-
+      No baseline control addresses resource pressure signals, throttling,
+      or load shedding. The baseline's CON controls scope capabilities but
+      do not require agents to respond to external pressure.
+
+  - entry: SC-2.3
+    title: "Alternatives recorded"
+    note: >-
+      No baseline control requires recording what options were considered
+      and rejected. Baseline issue #37 proposes this as OBS-09, citing
+      the scorecard as prior art. Pending.
+
+  - entry: SC-2.4
+    title: "Confidence represented"
+    note: >-
+      No baseline control requires agents to express uncertainty
+      explicitly. Baseline issue #37 proposes this as OBS-10, citing
+      the scorecard as prior art. Pending.
+
+  - entry: SC-5.4
+    title: "Earned autonomy"
+    note: >-
+      No baseline control requires dynamic trust calibration based on
+      demonstrated conformance. Baseline issue #29 proposes earned
+      authority with regression, citing the scorecard. The scorecard's
+      existing "Relationship to Agent Baseline" section notes this
+      symmetry. Pending.
+
+  - entry: SC-6.2
+    title: "Auditable behavioral change"
+    note: >-
+      No baseline control explicitly requires behavioral changes to be
+      logged with attribution. OBS-03 detects drift but does not require
+      the change itself to be attributed and recorded. Baseline issue #39
+      proposes this, citing the scorecard's System Evolution dimension.
+      Pending.
+
+  - entry: SC-6.3
+    title: "Reversible evolution"
+    note: >-
+      No baseline control requires operationally real rollback to a
+      previous validated behavioral state. Baseline issue #39 proposes
+      VAL-rollback alongside drift detection. Pending.
